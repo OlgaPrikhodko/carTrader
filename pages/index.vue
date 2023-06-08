@@ -1,5 +1,6 @@
 <template>
   <div>
-    <NuxtPage />
+    <NavBar />
+    <CarHero />
   </div>
 </template>
