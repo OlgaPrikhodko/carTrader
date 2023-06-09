@@ -1,3 +1,9 @@
+<script setup>
+const route = useRoute();
+
+useHead({ title: toTitleCase(route.params.name) });
+</script>
+
 <template>
   <div>
     <NavBar />

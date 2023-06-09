@@ -1,3 +1,13 @@
+<script setup>
+const route = useRoute();
+const make = route.params.make;
+const cityTitle = toTitleCase(route.params.city);
+useHead({
+  title: `${make ? toTitleCase(make) : "Cars"} in ${cityTitle}`,
+});
+
+</script>
+
 <template>
   <div>
     <NavBar />
