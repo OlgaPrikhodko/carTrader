@@ -4,7 +4,7 @@ const props = defineProps({ car: Object });
 
 <template>
   <div class="mt-10">
-    <img :src="car.url" class="w-full" alt="" />
+    <NuxtImg :src="car.url" class="w-full" alt="" />
 
     <h1 class="mt-10 text-4xl">{{ car.name }}</h1>
 
