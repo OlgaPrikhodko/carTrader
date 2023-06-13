@@ -1,7 +1,7 @@
 <script setup>
 const error = useError();
 const handleGoBack = () => {
-  navigateTo("/");
+  clearError({ redirect: "/" });
 };
 </script>
 
