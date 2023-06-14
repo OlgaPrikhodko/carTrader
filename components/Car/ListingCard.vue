@@ -18,7 +18,7 @@ const props = defineProps({
     <div class="p-3 flex">
       <NuxtLink
         class="text-blue-500 mr-4"
-        :to="`/profile/listing/view/${listing.id}`"
+        :to="`/profile/listings/view/${listing.id}`"
         >View</NuxtLink
       >
       <p class="text-red-400 cursor-pointer">Delete</p>
