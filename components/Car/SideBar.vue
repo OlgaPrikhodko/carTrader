@@ -1,6 +1,7 @@
 <script setup>
 const { makes } = useCars();
 const route = useRoute();
+const router = useRouter();
 const modal = ref({
   make: false,
   location: false,
@@ -8,6 +9,19 @@ const modal = ref({
 });
 
 const city = ref("");
+const priceRange = ref({
+  min: "",
+  max: "",
+});
+
+const priceRangeText = computed(() => {
+  const minPrice = route.query.minPrice;
+  const maxPrice = route.query.maxPrice;
+  if (!minPrice && !maxPrice) return "Any";
+  if (!minPrice && maxPrice) return `< $${maxPrice}`;
+  if (minPrice && !maxPrice) return `> $${minPrice}`;
+  if (minPrice && maxPrice) return `$${minPrice} - $${maxPrice}`;
+});
 
 const onChangeLocation = () => {
   if (!city.value) return;
@@ -28,6 +42,21 @@ const updateModal = (key) => {
 const onChangeMake = (make) => {
   updateModal("make");
   navigateTo(`/city/${route.params.city}/car/${make}`);
+};
+
+const onChangePrice = () => {
+  updateModal("price");
+
+  if (priceRange.value.min && priceRange.value.min) {
+    if (priceRange.value.min > priceRange.value.max) return;
+  }
+
+  router.push({
+    query: {
+      minPrice: priceRange.value.min,
+      maxPrice: priceRange.value.max,
+    },
+  });
 };
 </script>
 
@@ -77,9 +106,38 @@ const onChangeMake = (make) => {
     </div>
     <!-- MAKE END -->
 
+    <!-- PRICE START -->
     <div class="p-5 flex justify-between relative cursor-pointer border-b">
       <h3>Price</h3>
-      <h3 class="text-blue-400 capitalize"></h3>
+      <h3 class="text-blue-400 capitalize" @click="updateModal('price')">
+        {{ priceRangeText }}
+      </h3>
+      <div
+        v-if="modal.price"
+        class="absolute border shadow left-56 p-5 top-1 -m-1 bg-white"
+      >
+        <input
+          class="border p-1 rounded"
+          type="number"
+          placeholder="Min"
+          v-model="priceRange.min"
+        />
+
+        <input
+          class="border p-1 rounded"
+          type="number"
+          placeholder="Max"
+          v-model="priceRange.max"
+        />
+
+        <button
+          class="bg-blue-400 w-full mt-2 rounded text-white p-1"
+          @click="onChangePrice"
+        >
+          Apply
+        </button>
+      </div>
     </div>
+    <!-- PRICE END -->
   </div>
 </template>
