@@ -78,12 +78,20 @@ const inputs = [
         :options="makes"
         @change-input="onChangeInput"
       />
+
       <CarAdInput
         v-for="input in inputs"
         :key="input.id"
         :title="input.title"
         :name="input.name"
         :placeholder="input.placeholder"
+        @change-input="onChangeInput"
+      />
+
+      <CarAdTextArea
+        title="Description *"
+        name="description"
+        placeholder=""
         @change-input="onChangeInput"
       />
     </div>
