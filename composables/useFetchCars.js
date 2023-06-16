@@ -12,5 +12,5 @@ export default async (city, filters) => {
     });
   }
 
-  return data;
+  return { cars: data };
 };

@@ -1,19 +1,9 @@
 <script setup>
 const route = useRoute();
-const { toTitleCase } = useUtilities();
-const { cars } = useCars();
 
-const car = computed(() => {
-  const carId = parseInt(route.params.id);
-  return cars.find((car) => car.id === carId);
-});
-console.log(car);
-if (!car.value) {
-  throw createError({
-    statusCode: 404,
-    message: `Car with id ${route.params.id} does not exist`,
-  });
-}
+const { data: car } = await useFetchCar(route.params.id);
+const { toTitleCase } = useUtilities();
+
 useHead({ title: toTitleCase(route.params.name) });
 
 definePageMeta({
