@@ -5,6 +5,11 @@ const cars = await useFetchCars(route.params.city, {
   maxPrice: route.query.maxPrice,
   make: route.params.make,
 });
+
+watch(
+  () => route.query,
+  () => window.location.reload(true)
+);
 </script>
 
 <template>
