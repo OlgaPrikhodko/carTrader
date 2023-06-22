@@ -4,6 +4,7 @@ definePageMeta({
 });
 
 const { makes } = useCars();
+const user = useSupabaseUser();
 
 const info = useState("adInfo", () => {
   return {
@@ -16,9 +17,11 @@ const info = useState("adInfo", () => {
     seats: "",
     features: "",
     description: "",
-    image: null,
+    image: "nullun",
   };
 });
+
+const errorMessage = ref("");
 
 const onChangeInput = (data, name) => {
   info.value[name] = data;
@@ -37,9 +40,14 @@ const inputs = [
     name: "year",
     placeholder: "2020",
   },
-
   {
     id: 3,
+    title: "Price *",
+    name: "price",
+    placeholder: "3000",
+  },
+  {
+    id: 4,
     title: "Miles *",
     name: "miles",
     placeholder: "10,000",
@@ -57,12 +65,46 @@ const inputs = [
     placeholder: "5",
   },
   {
-    id: 4,
+    id: 7,
     title: "Features *",
     name: "features",
     placeholder: "Leather Interior, No Accidents",
   },
 ];
+
+const isButtonDisabled = computed(() => {
+  for (let key in info.value) {
+    if (!info.value[key]) return true;
+  }
+
+  return false;
+});
+
+const handleSubmit = async () => {
+  const body = {
+    ...info.value,
+    features: info.value.features.split(", "),
+    numberOfSeats: parseInt(info.value.seats),
+    city: info.value.city.toLowerCase(),
+    miles: parseInt(info.value.miles),
+    price: parseInt(info.value.price),
+    year: parseInt(info.value.year),
+    name: `${info.value.make} ${info.value.model}`,
+    listerId: user.value.id,
+  };
+
+  delete body.seats;
+
+  try {
+    const response = await $fetch("/api/car/listings", {
+      method: "post",
+      body,
+    });
+    navigateTo("/profile/listings");
+  } catch (error) {
+    errorMessage.value = error.statusMessage;
+  }
+};
 </script>
 
 <template>
@@ -96,6 +138,18 @@ const inputs = [
       />
 
       <CarAdImage @change-input="onChangeInput" />
+
+      <div>
+        <button
+          :disabled="isButtonDisabled"
+          @click="handleSubmit"
+          class="bg-blue-500 text-white rounded py-2 px-7 mt-3"
+        >
+          Submit
+        </button>
+
+        <p v-if="errorMessage" class="text-red-500 mt-3">{{ errorMessage }}</p>
+      </div>
     </div>
   </div>
 </template>
