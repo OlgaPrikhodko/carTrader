@@ -3,13 +3,19 @@ const props = defineProps({
   listing: Object,
 });
 
+const config = useRuntimeConfig();
+
 const emits = defineEmits(["deleteClick"]);
 </script>
 
 <template>
   <div class="shadow rounded overflow-hidden flex justify-between mb-4">
     <div class="flex">
-      <img :src="listing.url" class="w-80 mr-3 h-44" alt="" />
+      <img
+        :src="`${config.public.supabase.url}/storage/v1/object/public/images/${listing.image}`"
+        class="w-80 mr-3 h-44"
+        alt=""
+      />
 
       <div class="p-3">
         <h1 class="text-2xl">{{ listing.name }}</h1>
